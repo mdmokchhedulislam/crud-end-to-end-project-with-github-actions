@@ -1,8 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
-import { Contact } from "./ContactModal.js";
+
 import cors from 'cors';
 import dotenv from "dotenv";
+import contacts from "./ContactModal/contacts"
 dotenv.config();
 
 const app = express();
@@ -27,8 +28,8 @@ mongoose.connect(process.env.MONGO_URI, {
 // Get All Contacts
 app.get("/", async (req, res) => {
   try {
-    const contact = await Contact.find().sort({ createdAt: -1 });
-    res.status(200).json({ message: "All Contacts", contact });
+    const contact = await contacts.find().sort({ createdAt: -1 });
+    res.status(200).json({ message: "All Contacts", contacts });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -38,7 +39,7 @@ app.get("/", async (req, res) => {
 app.post("/", async (req, res) => {
   const { name, gmail, phone } = req.body;
   try {
-    const existing = await Contact.findOne({ gmail });
+    const existing = await contacts.findOne({ gmail });
     if (existing) return res.status(409).json({ message: "Contact already exists..!" });
 
     const contact = await Contact.create({ name, gmail, phone });
@@ -53,7 +54,7 @@ app.put("/:id", async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
   try {
-    const contact = await Contact.findById(id);
+    const contact = await contacts.findById(id);
     if (!contact) return res.status(404).json({ message: "Contact not found" });
 
     const data = await Contact.findByIdAndUpdate(id, updatedData, { new: true });
@@ -67,7 +68,7 @@ app.put("/:id", async (req, res) => {
 app.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const contact = await Contact.findById(id);
+    const contact = await contacts.findById(id);
     if (!contact) return res.status(404).json({ message: "Contact not found" });
 
     await contact.deleteOne();
