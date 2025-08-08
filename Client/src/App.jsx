@@ -12,7 +12,7 @@ const App = () => {
   const [relaod, setRelaod] = useState(false)
   const [id, setId] = useState("")
 
-const url = "http://k8s-default-myingres-f0240088a5-1332374574.us-east-1.elb.amazonaws.com/api";
+const url = "http://k8s-default-myingres-f0240088a5-1332374574.us-east-1.elb.amazonaws.com/api/";
 
 
 
