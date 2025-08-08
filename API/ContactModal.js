@@ -18,6 +18,5 @@ const contacSchema = new mongoose.Schema({
         default:Date.now
     }
 })
- const contacts = mongoose.model("contacts",contacSchema)
 
- export default contacts;
+export const Contact = mongoose.model("Contact",contacSchema)
