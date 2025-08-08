@@ -17,14 +17,13 @@ spec:
         image: mokchhedul/crud-frontend:latest
         ports:
         - containerPort: 80
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: react-frontend-service
 spec:
-  type: ClusterIP 
+  type: ClusterIP
   selector:
     app: react-frontend
   ports:

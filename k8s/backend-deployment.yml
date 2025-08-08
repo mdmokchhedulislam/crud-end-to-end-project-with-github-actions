@@ -6,7 +6,6 @@ metadata:
 data:
   MONGO_URI: mongodb://mongo:27017/data
   PORT: "3000"
-
 ---
 
 # Backend Deployment
@@ -25,22 +24,21 @@ spec:
         app: backend
     spec:
       containers:
-        - name: backend
-          image: mokchhedul/crud-backend:latest
-          ports:
-            - containerPort: 3000
-          env:
-            - name: MONGO_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: MONGO_URI
-            - name: PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: PORT
-
+      - name: backend
+        image: mokchhedul/crud-backend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            configMapKeyRef:
+              name: backend-config
+              key: MONGO_URI
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: backend-config
+              key: PORT
 ---
 
 # Backend Service
@@ -52,8 +50,7 @@ spec:
   selector:
     app: backend
   ports:
-    - protocol: TCP
-      port: 3000
-      targetPort: 3000
-  type: ClusterIP 
-
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+  type: ClusterIP
