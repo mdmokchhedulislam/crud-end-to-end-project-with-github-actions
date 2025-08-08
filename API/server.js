@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 import cors from 'cors';
 import dotenv from "dotenv";
-import contacts from "./ContactModal/contacts"
+import contacts  from "./ContactModal.js"
 dotenv.config();
 
 const app = express();
