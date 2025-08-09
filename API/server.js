@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
+const apiRouter = express.Router(); // একটি নতুন রাউটার তৈরি করুন
 
 // Middlewares
 app.use(express.json());
@@ -24,8 +25,10 @@ mongoose.connect(process.env.MONGO_URI, {
   .then(() => console.log("MongoDB Connected..!"))
   .catch((err) => console.error("MongoDB Error:", err));
 
+// ### API রুটগুলো apiRouter ব্যবহার করে ডিফাইন করুন ###
+
 // Get All Contacts
-app.get("/", async (req, res) => {
+apiRouter.get("/", async (req, res) => {
   try {
     const contact = await Contact.find().sort({ createdAt: -1 });
     res.status(200).json({ message: "All Contacts", contact });
@@ -35,7 +38,7 @@ app.get("/", async (req, res) => {
 });
 
 // Add Contact
-app.post("/", async (req, res) => {
+apiRouter.post("/", async (req, res) => {
   const { name, gmail, phone } = req.body;
   try {
     const existing = await Contact.findOne({ gmail });
@@ -49,7 +52,7 @@ app.post("/", async (req, res) => {
 });
 
 // Edit Contact
-app.put("/:id", async (req, res) => {
+apiRouter.put("/:id", async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
   try {
@@ -64,7 +67,7 @@ app.put("/:id", async (req, res) => {
 });
 
 // Delete Contact
-app.delete("/:id", async (req, res) => {
+apiRouter.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const contact = await Contact.findById(id);
@@ -77,6 +80,9 @@ app.delete("/:id", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT
+// ### '/api' প্রিফিক্স দিয়ে রাউটারটিকে মূল অ্যাপে যুক্ত করুন ###
+app.use('/api', apiRouter); [8]
+
+const PORT = process.env.PORT || 3000; // একটি ফলব্যাক পোর্ট যুক্ত করা ভালো অভ্যাস
 // Start server
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
