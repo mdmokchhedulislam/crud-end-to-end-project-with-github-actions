@@ -11,7 +11,7 @@ const apiRouter = express.Router(); // একটি নতুন রাউটা
 // Middlewares
 app.use(express.json());
 app.use(cors({
-  origin: true,
+  origin: ["http://13.218.145.174"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
