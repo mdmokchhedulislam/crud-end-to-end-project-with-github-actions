@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   backend:
-    build: ./API
+    image: mokchhedul/crud-backend:latest
     ports:
       - "3000:3000"
     environment:
@@ -12,9 +12,9 @@ services:
       - mongo
 
   frontend:
-    build: ./Client
+    image: mokchhedul/crud-frontend:latest
     ports:
-      - "5000:5000"
+      - "3000:3000"
 
   mongo:
     image: mongo
