@@ -1,3 +1,92 @@
+
+
+resource "aws_security_group" "bastion_sg" {
+  name        = "bastion-sg"
+  description = "Bastion host SG"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["103.134.27.160/32"]   # তোমার IP
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "Bastion-SG"
+  }
+}
+
+
+resource "aws_instance" "bastion_host" {
+  ami                    = var.bastion_ami_id      
+  instance_type          = "t3.micro"
+  subnet_id              = var.public_subnet_id
+  key_name               = var.bastion_key_name
+  vpc_security_group_ids = [aws_security_group.bastion_sg.id]
+  associate_public_ip_address = true
+
+  tags = {
+    Name = "Bastion-Host"
+  }
+}
+
+
+
+
+# Cluster SG
+resource "aws_security_group" "eks_cluster_sg" {
+  name   = "${var.cluster_name}-eks-cluster-sg"
+  vpc_id = var.vpc_id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.cluster_name}-eks-cluster-sg"
+  }
+}
+
+
+# Allow bastion to talk to cluster SG
+resource "aws_security_group_rule" "eks_cluster_ingress_nodes" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.eks_cluster_sg.id
+  source_security_group_id = aws_security_group.bastion_sg.id
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 resource "aws_iam_role" "controller_node_role" {
   name = var.controller_iam_role_name
   assume_role_policy = jsonencode({
@@ -29,6 +118,7 @@ resource "aws_eks_cluster" "eks_controller_cluster" {
     endpoint_private_access = true
     endpoint_public_access  = true
 
+    security_group_ids = [aws_security_group.eks_cluster_sg.id]
     subnet_ids = var.vpc_subnet_ids
   }
 

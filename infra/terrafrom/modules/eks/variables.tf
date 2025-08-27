@@ -1,3 +1,24 @@
+variable "vpc_id" {
+  type = string
+  
+}
+
+variable "bastion_ami_id" {
+  type = string
+  default = "ami-0360c520857e3138f"
+  
+}
+variable "bastion_key_name" {
+  type = string
+  default = "server"
+}
+
+variable "public_subnet_id" {
+  type = string
+  
+}
+
+
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
@@ -23,7 +44,7 @@ variable "worker_iam_role_name" {
 }
 
 variable "vpc_subnet_ids" {
-  description = "List of subnet IDs for the EKS cluster (public/private as needed)"
+  description = "List of subnet IDs for the EKS cluster (private as needed)"
   type        = list(string)
   default     = []
 }

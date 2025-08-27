@@ -76,6 +76,7 @@ resource "aws_subnet" "private_subnet_2" {
 }
 
 resource "aws_eip" "nat_eip" {
+  domain = "vpc"
 
   tags = {
     Name = "nat-eip"
@@ -85,7 +86,7 @@ resource "aws_eip" "nat_eip" {
 
 # NAT Gateway in public subnet 1
 resource "aws_nat_gateway" "nat_gw" {
-  allocation_id = aws_eip.nat_eip.id
+  allocation_id = aws_eip.nat_eip.allocation_id
   subnet_id     = aws_subnet.public_subnet_1.id
 
   tags = {
