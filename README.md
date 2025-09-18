@@ -132,6 +132,8 @@ kubectl apply -f k8s/
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
+find login password:  kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d
+
 
 Login to ArgoCD UI and connect this GitHub repo for GitOps.
 
