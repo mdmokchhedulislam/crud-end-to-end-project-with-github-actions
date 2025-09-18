@@ -12,7 +12,7 @@ const App = () => {
   const [relaod, setRelaod] = useState(false)
   const [id, setId] = useState("")
 
-const url = "http://13.218.145.174:3000/api";
+const url = "www.mokchhedulislam.page.gd/api";
 
 
 
